@@ -1,10 +1,11 @@
 # surface1989-store
 *Application made with Spring Boot
--Jdk 1.8
--Spring Boot
--Spring Security
--Thymeleaf
--Mysql 8
+1.Jdk 1.8
+2.Maven 3.6
+3.Spring Boot
+4.Spring Security
+5.Thymeleaf
+6.Mysql 8
 
 
 *Create database struct and insert data
@@ -27,5 +28,5 @@
 -Logout
 - CRUD product, validation
 -Paging products
-- Search product follow name, manufacture and paging result.
+- Search product follow to name, manufacture and paging result.
 -Display list user
