@@ -1,11 +1,11 @@
 # surface1989-store
 *Application made with Spring Boot
-Jdk 1.8
-Spring Boot
-Spring Security
-Thymeleaf
-Mysql 8
-Bootstrap
+-Jdk 1.8
+-Spring Boot
+-Spring Security
+-Thymeleaf
+-Mysql 8
+
 
 *Create database struct and insert data
 1. Clone sql script from link https://github.com/surface1999/sql
