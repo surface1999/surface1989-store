@@ -11,8 +11,7 @@
 3. Edit username and password in app.properties file.
 4. Run as Spring Boot Application
 
-* Deltail:
-Web have functions:
+* Deltail: The web have functions:
 -Register
 -Login
 -Logout
