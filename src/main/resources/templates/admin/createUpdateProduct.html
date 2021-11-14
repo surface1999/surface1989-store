@@ -82,7 +82,7 @@
 									<label for="manufacture">Manufacture</label> <select
 										th:field="*{productManufacture.manufactureId}"
 										class="custom-select">
-										<option th:each="manufacture:${manufactures}"
+										<option th:if="${manufactures != null}" th:each="manufacture:${manufactures}"
 											th:value="${manufacture.getManufactureId()}"
 											th:text="${manufacture.getManufactureName()}" />
 									</select>

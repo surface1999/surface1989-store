@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/register", "/**/ws", "/plugins/**", "/dist/**", "/images/**", "/webjars/**")
 				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login")
-				.usernameParameter("email").defaultSuccessUrl("/admin").permitAll().and().logout()
+				.usernameParameter("email").defaultSuccessUrl("/admin/products").permitAll().and().logout()
 				.invalidateHttpSession(true).clearAuthentication(true)
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
 
