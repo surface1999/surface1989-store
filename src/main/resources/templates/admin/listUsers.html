@@ -1,0 +1,240 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdminLTE 3 | Dashboard</title>
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet"
+	th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}">
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+<!-- Ionicons -->
+<link rel="stylesheet"
+	th:href="@{https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css}">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet"
+	th:href="@{/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css}">
+<!-- iCheck -->
+<link rel="stylesheet"
+	th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+<!-- JQVMap -->
+<link rel="stylesheet" th:href="@{/plugins/jqvmap/jqvmap.min.css}">
+<!-- Theme style -->
+<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+<!-- overlayScrollbars -->
+<link rel="stylesheet"
+	th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+<!-- Daterange picker -->
+<link rel="stylesheet"
+	th:href="@{/plugins/daterangepicker/daterangepicker.css}">
+<!-- summernote -->
+<link rel="stylesheet"
+	th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+<style>
+.cell {
+	vertical-align: middle;
+}
+</style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div th:replace="fragments/header :: header"></div>
+	<div class="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" style="min-height: 100vh;">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1>DataTables</h1>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a th:href="@{#}">Home</a></li>
+								<li class="breadcrumb-item active">DataTables</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<a th:href="@{#}"
+										class="btn btn-light btn-sm font-weight-bold"
+										style="border-color: #E5E4E4" role="button" id="create">Create
+										new</a>
+									<div class="card-tools">
+										<form method="get" th:action="@{#}"
+											class="input-group input-group-sm" style="width: 150px;">
+											<input type="text" name="key"
+												class="form-control float-right" placeholder="Search...">
+											<div class="input-group-append">
+												<button type="submit" class="btn btn-default">
+													<i class="fas fa-search"></i>
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+								<!-- /.card-header -->
+								<div class="card-body table-responsive p-0" style="height: 60vh">
+									<table class="table table-head-fixed text-nowrap">
+										<thead>
+											<tr th:if="${key != null}">
+												<td colspan="10"><span
+													class="text-success font-weight-bold"
+													th:text="${users.getTotalElements()}"></span> <span
+													th:text="${users.getTotalElements()>2? ' results for key ': ' result for key '}"></span>
+													<span class="text-danger font-weight-bold">&nbsp;'<span
+														th:text="${key}"></span>'
+												</span></td>
+											</tr>
+										</thead>
+										<thead>
+											<tr>
+												<th>Order</th>
+												<th>First Name</th>
+												<th>LastName</th>
+												<th>Email</th>
+												<th>Password</th>
+											</tr>
+										</thead>
+										<tbody>
+											<th:block th:if="${users != null}">
+												<th:block th:each="user, inter: ${users.getContent()}">
+													<tr>
+														<td style="vertical-align: middle"
+															th:text="${inter.index + 1}"></td>
+														<td style="vertical-align: middle"
+															th:text="${user.getFirstName()}"></td>
+														<td style="vertical-align: middle"
+															th:text="${user.getLastName()}"></td>
+														<td style="vertical-align: middle"
+															th:text="${user.getEmail()}"></td>
+														<td style="vertical-align: middle"
+															th:text="${user.getPassword()}">MP</td>
+														<td style="vertical-align: middle"><a th:href="@{#}"><i
+																class="fas fa-edit text-success"></i></a>&ensp; <a
+															th:href="@{#}"><i
+																class="fas fa-trash-alt text-danger"></i></a>&ensp; <a
+															th:href="@{#}"><i
+																class="fas fa-info-circle text-info"></i></a></td>
+													</tr>
+												</th:block>
+											</th:block>
+										</tbody>
+									</table>
+								</div>
+								<!-- /.card-body -->
+
+								<div class="card-footer clearfix"
+									th:if="${users.getTotalPages() != 0}"
+									th:with="url=${key != null}? '/admin/users/search/?key='+${key} + '&page=': '/admin/users?page='">
+									<ul class="pagination pagination-sm m-0 float-right">
+										<li class="page-item"><a class="page-link"
+											th:if="${users.hasPrevious()}"
+											th:href="@{${url}+ ${users.getNumber()-1}}">Previous</a> <a
+											class="page-link" th:unless="${users.hasPrevious()}"
+											th:href="@{${url}+ ${users.getNumber()}}">Previous</a></li>
+										<th:block
+											th:if="${!users.hasNext() && users.getTotalPages()>=3}">
+											<li class="page-item"><a class="page-link"
+												th:href="@{${url}+${users.getNumber()-2}}"
+												th:text="${users.getNumber()-1}"></a></li>
+										</th:block>
+										<li class="page-item"><a class="page-link"
+											th:if="${users.hasPrevious()}"
+											th:href="@{${url}+${users.getNumber()-1}}"
+											th:text="${users.getNumber()}"></a></li>
+										<li class="page-item"><a
+											class="page-link bg-dark text-light"
+											th:href="@{${url}+${users.getNumber()}}"
+											th:text="${users.getNumber()+1}"></a></li>
+										<li class="page-item"><a class="page-link"
+											th:if="${users.hasNext()}"
+											th:href="@{${url}+${users.getNumber()+1}}"
+											th:text="${users.getNumber()+2}"></a></li>
+										<th:block
+											th:if="${!users.hasPrevious() && users.getTotalPages()>=3}">
+											<li class="page-item"><a class="page-link"
+												th:href="@{${url}+${users.getNumber()+2}}"
+												th:text="${users.getNumber()+3}"></a></li>
+										</th:block>
+										<li class="page-item"><a class="page-link"
+											th:if="${users.hasNext()}"
+											th:href="@{${url}+ ${users.getNumber()+1}}">Next</a> <a
+											class="page-link" th:unless="${users.hasNext()}"
+											th:href="@{${url}+ ${users.getNumber()}}">Next</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+		<div th:replace="fragments/footer :: footer"></div>
+		<!-- Control Sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<!-- Control sidebar content goes here -->
+		</aside>
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+	<!-- jQuery -->
+	<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script th:src="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+	<script>
+		$.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- ChartJS -->
+	<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+	<!-- Sparkline -->
+	<script th:src="@{/plugins/sparklines/sparkline.js}"></script>
+	<!-- JQVMap -->
+
+	<script th:src="@{/plugins/jqvmap/jquery.vmap.min.js}"></script>
+	<script th:src="@{/plugins/jqvmap/maps/jquery.vmap.usa.js}"></script>
+	<!-- jQuery Knob Chart -->
+	<script th:src="@{/plugins/jquery-knob/jquery.knob.min.js}"></script>
+	<!-- daterangepicker -->
+	<script th:src="@{/plugins/moment/moment.min.js}"></script>
+	<script th:src="@{/plugins/daterangepicker/daterangepicker.js}"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script
+		th:src="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
+	<!-- Summernote -->
+	<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+	<!-- overlayScrollbars -->
+	<script
+		th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+	<!-- AdminLTE App -->
+	<script th:src="@{/dist/js/adminlte.js}"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script th:src="@{/dist/js/demo.js}"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script th:src="@{/dist/js/pages/dashboard.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,205 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdminLTE 3 | Dashboard</title>
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet"
+	th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}">
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+<!-- Ionicons -->
+<link rel="stylesheet"
+	th:href="@{https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css}">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet"
+	th:href="@{/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css}">
+<!-- iCheck -->
+<link rel="stylesheet"
+	th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+<!-- JQVMap -->
+<link rel="stylesheet" th:href="@{/plugins/jqvmap/jqvmap.min.css}">
+<!-- Theme style -->
+<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+<!-- overlayScrollbars -->
+<link rel="stylesheet"
+	th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+<!-- Daterange picker -->
+<link rel="stylesheet"
+	th:href="@{/plugins/daterangepicker/daterangepicker.css}">
+<!-- summernote -->
+<link rel="stylesheet"
+	th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+<style>
+.cell {
+	vertical-align: middle;
+}
+</style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div th:replace="fragments/header :: header"></div>
+	<div class="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" style="min-height: 1400px;">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 th:text="${isUpdate}? 'Update product': 'Add a new product'"></h1>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">DataTables</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid">
+					<div class="card card-primary">
+						<form method="post"
+							th:action="@{${isUpdate}?'/admin/products/edit': '/admin/products/add'}"
+							th:object="${product}" th:enctype="${'multipart/form-data'}">
+							<div class="card-body">
+								<input th:field="*{productId}" type="text"
+									class="form-control d-none" id="name"
+									placeholder="Enter product name" />
+								<div class="form-group">
+									<label for="name">Product name</label> <input
+										th:field="*{productName}" type="text" class="form-control"
+										id="name" placeholder="Enter product name" />
+								</div>
+								<div th:each="err: ${#fields.errors('productName')}"
+									th:text="${err}" class="alert alert-danger" role="alert"></div>
+								<div class="form-group">
+									<label for="manufacture">Manufacture</label> <select
+										th:field="*{productManufacture.manufactureId}"
+										class="custom-select">
+										<option th:each="manufacture:${manufactures}"
+											th:value="${manufacture.getManufactureId()}"
+											th:text="${manufacture.getManufactureName()}" />
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="price">Price($)</label> <input
+										th:field="*{productPrice}" type="number" class="form-control"
+										id="price" min="100" max="2000" value="100"
+										placeholder="Enter product price" />
+								</div>
+								<div th:each="err: ${#fields.errors('productPrice')}"
+									th:text="${err}" class="alert alert-danger" role="alert"></div>
+								<div class="form-group">
+									<label for="quantity">Quantity</label> <input
+										th:field="*{productQuantity}" type="number"
+										class="form-control" id="price" min="0" max="500" value="0"
+										placeholder="Enter product quantity" />
+								</div>
+								<div th:each="err: ${#fields.errors('productQuantity')}"
+									th:text="${err}" class="alert alert-danger" role="alert"></div>
+								<div class="form-group">
+									<label for="productImage">Product Image</label>
+									<div class="input-group">
+										<input th:field="*{productImage}" type="file"
+											accept=".jpg, .png, .jpeg|image/*" id="productImage" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="os">OS</label> <select th:field="*{productOS}"
+										class="custom-select">
+										<option value="Androi">Androi</option>
+										<option value="IOS">IOS</option>
+									</select>
+								</div>
+								<div th:each="err: ${#fields.errors('productOS')}"
+									th:text="${err}" class="alert alert-danger" role="alert"></div>
+								<div class="form-group">
+									<label for="ram">RAM</label> <select th:field="*{productRam}"
+										class="custom-select">
+										<option value="3">3G</option>
+										<option value="4">4G</option>
+										<option value="6">6G</option>
+										<option value="8">8G</option>
+										<option value="12">12G</option>
+									</select>
+								</div>
+								<div th:each="err: ${#fields.errors('productRam')}"
+									th:text="${err}" class="alert alert-danger" role="alert"></div>
+								<div class="form-group">
+									<label for="rom">ROM</label> <select th:field="*{productRom}"
+										class="custom-select">
+										<option value="32">32G</option>
+										<option value="64">64G</option>
+										<option value="128">128G</option>
+										<option value="256">256G</option>
+										<option value="512">512G</option>
+									</select>
+								</div>
+								<div th:each="err: ${#fields.errors('productRom')}"
+									th:text="${err}" class="alert alert-danger" role="alert"></div>
+							</div>
+					</div>
+					<div class="card-footer">
+						<button id="btn-add-update" type="submit" class="btn btn-success"
+							th:text="${isUpdate}? 'Save': 'Add new'"></button>
+					</div>
+					</form>
+				</div>
+		</div>
+	</div>
+	</div>
+	<!-- /.content-wrapper -->
+	<div th:replace="fragments/footer :: footer"></div>
+	<!-- Control Sidebar -->
+	<aside class="control-sidebar control-sidebar-dark">
+		<!-- Control sidebar content goes here -->
+	</aside>
+	<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+	<!-- jQuery -->
+	<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script th:src="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+	<script>
+		$.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- ChartJS -->
+	<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+	<!-- Sparkline -->
+	<script th:src="@{/plugins/sparklines/sparkline.js}"></script>
+	<!-- JQVMap -->
+
+	<script th:src="@{/plugins/jqvmap/jquery.vmap.min.js}"></script>
+	<script th:src="@{/plugins/jqvmap/maps/jquery.vmap.usa.js}"></script>
+	<!-- jQuery Knob Chart -->
+	<script th:src="@{/plugins/jquery-knob/jquery.knob.min.js}"></script>
+	<!-- daterangepicker -->
+	<script th:src="@{/plugins/moment/moment.min.js}"></script>
+	<script th:src="@{/plugins/daterangepicker/daterangepicker.js}"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script
+		th:src="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
+	<!-- Summernote -->
+	<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+	<!-- overlayScrollbars -->
+	<script
+		th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+	<!-- AdminLTE App -->
+	<script th:src="@{/dist/js/adminlte.js}"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script th:src="@{/dist/js/demo.js}"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script th:src="@{/dist/js/pages/dashboard.js}"></script>
+</body>
+
+</html>

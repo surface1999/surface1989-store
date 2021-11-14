@@ -1,0 +1,276 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdminLTE 3 | Dashboard</title>
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet"
+	th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}">
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+<!-- Ionicons -->
+<link rel="stylesheet"
+	th:href="@{https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css}">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet"
+	th:href="@{/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css}">
+<!-- iCheck -->
+<link rel="stylesheet"
+	th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+<!-- JQVMap -->
+<link rel="stylesheet" th:href="@{/plugins/jqvmap/jqvmap.min.css}">
+<!-- Theme style -->
+<link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
+<!-- overlayScrollbars -->
+<link rel="stylesheet"
+	th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+<!-- Daterange picker -->
+<link rel="stylesheet"
+	th:href="@{/plugins/daterangepicker/daterangepicker.css}">
+<!-- summernote -->
+<link rel="stylesheet"
+	th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+<style>
+.cell {
+	vertical-align: middle;
+}
+</style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div th:replace="fragments/header :: header"></div>
+	<div class="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" style="min-height: 100vh;">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1>DataTables</h1>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a th:href="@{#}">Home</a></li>
+								<li class="breadcrumb-item active">DataTables</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-12">
+							<div
+								class="alert alert-custom alert-success alert-dismissible fade show"
+								th:if="${status != null}" role="alert">
+								<strong>Congratulation!</strong>&nbsp;<span>You are
+									successfully </span><span id="notification" th:text="${status}"></span><span>
+									the product!</span>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="card">
+								<div class="card-header">
+									<a th:href="@{/admin/products/add}"
+										class="btn btn-light btn-sm font-weight-bold"
+										style="border-color: #E5E4E4" role="button" id="create">Create
+										new</a>
+									<div class="card-tools">
+										<form method="get" th:action="@{'/admin/products/search'}"
+											class="input-group input-group-sm" style="width: 150px;">
+											<input type="text" name="key"
+												class="form-control float-right" placeholder="Search...">
+											<div class="input-group-append">
+												<button type="submit" class="btn btn-default">
+													<i class="fas fa-search"></i>
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+								<!-- /.card-header -->
+								<div class="card-body table-responsive p-0" style="height: 60vh">
+									<table class="table table-head-fixed text-nowrap">
+										<thead>
+											<tr th:if="${key != null}">
+												<td colspan="10"><span
+													class="text-success font-weight-bold"
+													th:text="${products.getTotalElements()}"></span> <span
+													th:text="${products.getTotalElements()>2? ' results for key ': ' result for key '}"></span>
+													<span class="text-danger font-weight-bold">&nbsp;'<span
+														th:text="${key}"></span>'
+												</span></td>
+											</tr>
+										</thead>
+										<thead>
+											<tr>
+												<th>Order</th>
+												<th style="text-align: center;">Image</th>
+												<th>Name</th>
+												<th>OS</th>
+												<th>RAM</th>
+												<th>ROM</th>
+												<th>Price</th>
+												<th>Quantity</th>
+												<th>Controller</th>
+											</tr>
+										</thead>
+										<tbody>
+											<th:block th:if="${products != null}">
+												<th:block th:each="product, inter: ${products.getContent()}">
+													<tr>
+														<td style="vertical-align: middle"
+															th:text="${inter.index + 1}"></td>
+														<td align="center" style="width: 100px"><img
+															style="width: 100%" th:alt="${product.getProductName()}"
+															th:src="@{'/images/'+${product.getProductId()} + '.png'}" /></td>
+														<td style="vertical-align: middle"
+															th:text="${product.getProductManufacture().getManufactureName()} + ' ' + ${product.getProductName()}">
+														</td>
+														<td style="vertical-align: middle"
+															th:text="${product.getProductOS()}"></td>
+														<td style="vertical-align: middle"
+															th:text="${product.getProductRam()} + ' G'"></td>
+														<td style="vertical-align: middle"
+															th:text="${product.getProductRom()} + ' G'"></td>
+														<td style="vertical-align: middle"
+															th:text="${product.getProductPrice()}+ '$'"></td>
+														<td style="vertical-align: middle"
+															th:text="${product.getProductQuantity()}"></td>
+														<td style="vertical-align: middle"><a
+															th:href="@{'/admin/products/edit?productId=' + ${product.getProductId()}}"><i
+																class="fas fa-edit text-success"></i></a>&ensp; <a
+															data-toggle="modal"
+															th:data-target="@{'#deleteConfirm'+${product.getProductId()}}"><i
+																class="fas fa-trash-alt text-danger"></i></a>&ensp; <a
+															th:href="@{#}"><i
+																class="fas fa-info-circle text-info"></i></a></td>
+													</tr>
+													<div th:replace="fragments/deleteConfirm :: deleteConfirm"></div>
+												</th:block>
+											</th:block>
+										</tbody>
+									</table>
+								</div>
+								<!-- /.card-body -->
+
+								<div class="card-footer clearfix"
+									th:if="${products.getTotalPages() != 0}"
+									th:with="url=${key != null}? '/admin/products/search/?key='+${key} + '&page=': '/admin/products?page='">
+									<ul class="pagination pagination-sm m-0 float-right">
+										<li class="page-item"><a class="page-link"
+											th:if="${products.hasPrevious()}"
+											th:href="@{${url}+ ${products.getNumber()-1}}">Previous</a> <a
+											class="page-link" th:unless="${products.hasPrevious()}"
+											th:href="@{${url}+ ${products.getNumber()}}">Previous</a></li>
+										<th:block
+											th:if="${!products.hasNext() && products.getTotalPages()>=3}">
+											<li class="page-item"><a class="page-link"
+												th:href="@{${url}+${products.getNumber()-2}}"
+												th:text="${products.getNumber()-1}"></a></li>
+										</th:block>
+										<li class="page-item"><a class="page-link"
+											th:if="${products.hasPrevious()}"
+											th:href="@{${url}+${products.getNumber()-1}}"
+											th:text="${products.getNumber()}"></a></li>
+										<li class="page-item"><a
+											class="page-link bg-dark text-light"
+											th:href="@{${url}+${products.getNumber()}}"
+											th:text="${products.getNumber()+1}"></a></li>
+										<li class="page-item"><a class="page-link"
+											th:if="${products.hasNext()}"
+											th:href="@{${url}+${products.getNumber()+1}}"
+											th:text="${products.getNumber()+2}"></a></li>
+										<th:block
+											th:if="${!products.hasPrevious() && products.getTotalPages()>=3}">
+											<li class="page-item"><a class="page-link"
+												th:href="@{${url}+${products.getNumber()+2}}"
+												th:text="${products.getNumber()+3}"></a></li>
+										</th:block>
+										<li class="page-item"><a class="page-link"
+											th:if="${products.hasNext()}"
+											th:href="@{${url}+ ${products.getNumber()+1}}">Next</a> <a
+											class="page-link" th:unless="${products.hasNext()}"
+											th:href="@{${url}+ ${products.getNumber()}}">Next</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+		<div th:replace="fragments/footer :: footer"></div>
+		<!-- Control Sidebar -->
+		<aside class="control-sidebar control-sidebar-dark">
+			<!-- Control sidebar content goes here -->
+		</aside>
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+	<script type="text/javascript">
+	window.onload = ()=>{
+		if($('#notification').length){
+			setTimeout(function(){
+				$('.alert-custom').alert('close');
+			}, 2000);
+		}
+	}
+	
+	</script>
+	<!-- jQuery -->
+	<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script th:src="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+	<script>
+		$.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- ChartJS -->
+	<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+	<!-- Sparkline -->
+	<script th:src="@{/plugins/sparklines/sparkline.js}"></script>
+	<!-- JQVMap -->
+
+	<script th:src="@{/plugins/jqvmap/jquery.vmap.min.js}"></script>
+	<script th:src="@{/plugins/jqvmap/maps/jquery.vmap.usa.js}"></script>
+	<!-- jQuery Knob Chart -->
+	<script th:src="@{/plugins/jquery-knob/jquery.knob.min.js}"></script>
+	<!-- daterangepicker -->
+	<script th:src="@{/plugins/moment/moment.min.js}"></script>
+	<script th:src="@{/plugins/daterangepicker/daterangepicker.js}"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script
+		th:src="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
+	<!-- Summernote -->
+	<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+	<!-- overlayScrollbars -->
+	<script
+		th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+	<!-- AdminLTE App -->
+	<script th:src="@{/dist/js/adminlte.js}"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script th:src="@{/dist/js/demo.js}"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script th:src="@{/dist/js/pages/dashboard.js}"></script>
+</body>
+
+</html>
