@@ -5,6 +5,7 @@
 
 *Run Source code
 1. Clone source code in to a new workspace:
+  git clone https://github.com/surface1999/surface1989-store.git
 2. In eclipse:
   File -> Import -> Import Existing Maven Project
   At Root Directory, choose source code folder just cloned -> Finish 
